@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { User, ApiResponse } from '@/lib/types';
 
 // In-memory storage for demonstration (in production, use a database)
+let nextId = 3; // Track next available ID
 const users: User[] = [
   {
     id: '1',
@@ -32,10 +33,37 @@ export async function POST(request: Request) {
   try {
     const body = await request.json();
     
+    // Validate required fields
+    if (!body.name || typeof body.name !== 'string' || body.name.trim() === '') {
+      const response: ApiResponse<null> = {
+        success: false,
+        error: 'Name is required and must be a non-empty string',
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+    
+    if (!body.email || typeof body.email !== 'string') {
+      const response: ApiResponse<null> = {
+        success: false,
+        error: 'Email is required and must be a string',
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+    
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(body.email)) {
+      const response: ApiResponse<null> = {
+        success: false,
+        error: 'Invalid email format',
+      };
+      return NextResponse.json(response, { status: 400 });
+    }
+    
     const newUser: User = {
-      id: (users.length + 1).toString(),
-      name: body.name,
-      email: body.email,
+      id: (nextId++).toString(), // Use incrementing ID
+      name: body.name.trim(),
+      email: body.email.trim(),
       createdAt: new Date().toISOString(),
     };
     
