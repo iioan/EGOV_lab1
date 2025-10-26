@@ -1,8 +1,10 @@
 import { NextResponse } from 'next/server';
 import { User, ApiResponse } from '@/lib/types';
 
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 // In-memory storage for demonstration (in production, use a database)
-let nextId = 3; // Track next available ID
 const users: User[] = [
   {
     id: '1',
@@ -17,6 +19,9 @@ const users: User[] = [
     createdAt: new Date().toISOString(),
   },
 ];
+
+// Initialize nextId based on existing users
+let nextId = Math.max(...users.map(u => parseInt(u.id)), 0) + 1;
 
 // GET /api/users - Get all users
 export async function GET() {
@@ -51,8 +56,7 @@ export async function POST(request: Request) {
     }
     
     // Basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(body.email)) {
+    if (!EMAIL_REGEX.test(body.email)) {
       const response: ApiResponse<null> = {
         success: false,
         error: 'Invalid email format',
