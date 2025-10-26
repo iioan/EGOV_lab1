@@ -21,7 +21,10 @@ const users: User[] = [
 ];
 
 // Initialize nextId based on existing users
-let nextId = Math.max(...users.map(u => parseInt(u.id)), 0) + 1;
+let nextId = Math.max(...users.map(u => {
+  const id = parseInt(u.id, 10);
+  return isNaN(id) ? 0 : id;
+}), 0) + 1;
 
 // GET /api/users - Get all users
 export async function GET() {
