@@ -70,7 +70,7 @@ export default function UserList() {
               </div>
               <ChevronDownIcon 
                 className="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 group-data-[state=open]:rotate-180" 
-                aria-hidden 
+                aria-hidden="true"
               />
             </Accordion.Trigger>
             <Accordion.Content className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
