@@ -7,7 +7,7 @@ export const Navbar = () => {
   return (
     <nav
       aria-label="Main Navigation"
-      className="sm:h-20 px-12 flex items-center justify-between bg-black/10"
+      className="sm:h-22 px-32 flex items-center justify-between bg-black/10"
     >
       <a href="#" title="My product">
         <Image src="/upb_logo.png"
@@ -16,7 +16,7 @@ export const Navbar = () => {
                alt="Picture of the author"/>
       </a>
       <div>
-        <Heading>
+        <Heading className="text-xl md:text-xl font-bold">
           Plată taxe universitate
         </Heading>
       </div>
@@ -28,7 +28,7 @@ export const Navbar = () => {
           Formular
         </a>
         <a
-          href="#"
+          href="/payments"
           className="inline-flex px-5 py-2 blink-text-primary bg-blinkGray400 hover:bg-blinkGray500 dark:bg-blinkGray800 dark:hover:bg-blinkGray700 rounded-full"
         >
           Plati
