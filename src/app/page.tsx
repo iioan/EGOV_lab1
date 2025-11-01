@@ -1,46 +1,46 @@
-import UserList from '@/components/UserList';
-import WelcomeDialog from '@/components/WelcomeDialog';
+import UserList from "@/components/UserList";
+import WelcomeDialog from "@/components/WelcomeDialog";
+import { Heading, Text } from "@radix-ui/themes";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
-      <main className="container mx-auto px-4 py-16">
-        <div className="max-w-4xl mx-auto">
-          <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-            EGOV Lab Application
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
-            A simple Next.js application with TypeScript, featuring both frontend and backend capabilities.
-          </p>
-          <div className="mb-8">
-            <WelcomeDialog />
-          </div>
-          
-          <div className="grid md:grid-cols-2 gap-6 mb-12">
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-                Frontend (React)
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300">
-                Built with React and TypeScript, featuring modern UI components and responsive design.
-              </p>
-            </div>
-            
-            <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-              <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-3">
-                Backend (API Routes)
-              </h2>
-              <p className="text-gray-600 dark:text-gray-300">
-                Powered by Next.js API routes with TypeScript for type-safe backend development.
-              </p>
-            </div>
-          </div>
+    <main className="container mx-auto max-w-6xl px-4 py-14">
+      {/* Hero */}
+      <section className="mb-10">
+        <Heading size="8" className="mb-3 tracking-tight">
+          EGOV Lab Application
+        </Heading>
+        <Text size="4" className="text-slate-600 dark:text-slate-300">
+          A Next.js + TypeScript app with both frontend UI and API routes. Radix UI
+          primitives + Tailwind for styling.
+        </Text>
 
-          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
-            <UserList />
-          </div>
+        <div className="mt-6">
+          <WelcomeDialog />
         </div>
-      </main>
-    </div>
+      </section>
+
+      {/* Feature cards */}
+      <section className="grid gap-6 md:grid-cols-2 mb-10">
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/60">
+          <Heading size="5" className="mb-2">Frontend (React)</Heading>
+          <Text className="text-slate-600 dark:text-slate-300">
+            Built with React and TypeScript. Accessible, composable components and responsive design.
+          </Text>
+        </div>
+
+        <div className="rounded-2xl border border-slate-200 bg-white/80 p-6 shadow-sm backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/60">
+          <Heading size="5" className="mb-2">Backend (API Routes)</Heading>
+          <Text className="text-slate-600 dark:text-slate-300">
+            Next.js API routes with type-safe handlers for quick data fetching.
+          </Text>
+        </div>
+      </section>
+
+      {/* Users */}
+      <section className="rounded-2xl border border-slate-200 bg-white/90 p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900/60">
+        <UserList />
+      </section>
+    </main>
   );
 }
