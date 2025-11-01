@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { User, ApiResponse } from '@/lib/types';
+import * as Accordion from '@radix-ui/react-accordion';
+import { ChevronDownIcon } from '@radix-ui/react-icons';
 
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
@@ -52,22 +54,38 @@ export default function UserList() {
       <h2 className="text-2xl font-semibold text-gray-900 dark:text-white mb-4">
         Users from API
       </h2>
-      <div className="grid gap-4">
+      <Accordion.Root type="single" collapsible className="w-full space-y-2">
         {users.map((user) => (
-          <div
+          <Accordion.Item
             key={user.id}
-            className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-4 border border-gray-200 dark:border-gray-700"
+            value={user.id.toString()}
+            className="bg-white dark:bg-gray-800 rounded-lg shadow-md border border-gray-200 dark:border-gray-700 overflow-hidden"
           >
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
-              {user.name}
-            </h3>
-            <p className="text-gray-600 dark:text-gray-300">{user.email}</p>
-            <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
-              Created: {new Date(user.createdAt).toLocaleDateString()}
-            </p>
-          </div>
+            <Accordion.Trigger className="w-full flex justify-between items-center p-4 text-left hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white">
+                  {user.name}
+                </h3>
+                <p className="text-gray-600 dark:text-gray-300 text-sm">{user.email}</p>
+              </div>
+              <ChevronDownIcon 
+                className="w-5 h-5 text-gray-500 dark:text-gray-400 transition-transform duration-200 group-data-[state=open]:rotate-180" 
+                aria-hidden="true"
+              />
+            </Accordion.Trigger>
+            <Accordion.Content className="overflow-hidden data-[state=open]:animate-slideDown data-[state=closed]:animate-slideUp">
+              <div className="p-4 pt-0 border-t border-gray-200 dark:border-gray-700">
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-2">
+                  Created: {new Date(user.createdAt).toLocaleDateString()}
+                </p>
+                <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
+                  User ID: {user.id}
+                </p>
+              </div>
+            </Accordion.Content>
+          </Accordion.Item>
         ))}
-      </div>
+      </Accordion.Root>
     </div>
   );
 }

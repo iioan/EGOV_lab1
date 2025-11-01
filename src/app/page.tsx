@@ -1,4 +1,5 @@
 import UserList from '@/components/UserList';
+import WelcomeDialog from '@/components/WelcomeDialog';
 
 export default function Home() {
   return (
@@ -8,9 +9,12 @@ export default function Home() {
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             EGOV Lab Application
           </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-300 mb-8">
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
             A simple Next.js application with TypeScript, featuring both frontend and backend capabilities.
           </p>
+          <div className="mb-8">
+            <WelcomeDialog />
+          </div>
           
           <div className="grid md:grid-cols-2 gap-6 mb-12">
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6">
