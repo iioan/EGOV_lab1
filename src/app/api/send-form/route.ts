@@ -1,10 +1,13 @@
 import { NextResponse } from 'next/server';
 import { supabase } from '@/utils/supabase';
 import { mapReduxStateToPaymentEntity, PaymentEntity } from '@/lib/models/payment';
+import { ReduxPaymentState } from '@/lib/types/reduxState';
+import { generatePaymentXML } from '@/utils/xmlGenerator';
+import { uploadPaymentXML } from '@/lib/services/storageService';
 
 export async function POST(req: Request) {
   try {
-    const data = await req.json();
+    const data: ReduxPaymentState = await req.json();
 
     console.log('Received data:', data);
 
@@ -40,6 +43,7 @@ export async function POST(req: Request) {
       final_amount: paymentEntity.finalAmount,
     };
 
+    // Insert into database
     const { data: insertedData, error: supabaseError } = await supabase
       .from('payments')
       .insert([dbPayload])
@@ -60,16 +64,39 @@ export async function POST(req: Request) {
 
     console.log('Payment saved successfully:', insertedData);
 
+    // Generate XML content
+    const xmlContent = generatePaymentXML(data, insertedData.id);
+
+    // Upload XML to Supabase Storage
+    const uploadResult = await uploadPaymentXML(xmlContent, insertedData.id);
+
+    if (!uploadResult.success) {
+      // Don't fail the entire request if XML upload fails
+      // but log it for monitoring
+      return NextResponse.json({
+        ok: true,
+        message: 'Payment saved successfully, but XML upload failed',
+        paymentId: insertedData.id,
+        receivedAt: new Date().toISOString(),
+        xmlUploadError: uploadResult.error,
+      });
+    }
+
     return NextResponse.json({
       ok: true,
       message: 'Payment saved successfully',
       paymentId: insertedData.id,
       receivedAt: new Date().toISOString(),
+      xmlFile: {
+        path: uploadResult.path,
+        url: uploadResult.url
+      }
     });
-  } catch (e: any) {
-    console.error('send-form error:', e);
+  } catch (e: unknown) {
+    const error = e as Error;
+    console.error('send-form error:', error);
     return NextResponse.json(
-      { ok: false, error: 'Invalid request or server error.', details: e?.message },
+      { ok: false, error: 'Invalid request or server error.', details: error?.message },
       { status: 400 }
     );
   }

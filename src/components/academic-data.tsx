@@ -5,6 +5,7 @@ import {Heading, Select, Text, TextField} from '@radix-ui/themes';
 import * as Label from '@radix-ui/react-label';
 import {useDispatch, useSelector} from 'react-redux';
 import {setField, yearsForProgram} from '@/lib/redux/features/academicDataSlice';
+import {setFormaAndReset} from '@/lib/redux/features/academicDataActions';
 import type {RootState} from '@/lib/redux/store';
 
 const Row: React.FC<{ children: React.ReactNode }> = ({children}) => (
@@ -27,50 +28,48 @@ export default function AcademicData() {
       {/* Program de studii */}
       <div className="mt-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-6 mt-4">
-        <Row>
-          <Label.Root className="block mb-2 text-sm font-medium">Program de studii</Label.Root>
-          <Select.Root
-            value={program}
-            onValueChange={(v) => dispatch(setField({field: 'program', value: v}))}
-          >
-            <Select.Trigger placeholder="Selectați programul de studii" className="w-full"/>
-            <Select.Content>
-              <Select.Item value="Licență">Licență</Select.Item>
-              <Select.Item value="Master">Master</Select.Item>
-              <Select.Item value="Doctorat">Doctorat</Select.Item>
-            </Select.Content>
-          </Select.Root>
-          <Text size="2" className="text-gray-400 block mt-1">
-            Selectați ciclul de studii urmat.
-          </Text>
-          {errors.program && (
-            <Text size="2" color="red" className="block mt-1">
-              {errors.program}
+          <Row>
+            <Label.Root className="block mb-2 text-sm font-medium">Program de studii</Label.Root>
+            <Select.Root
+              value={program}
+              onValueChange={(v) => dispatch(setField({field: 'program', value: v}))}
+            >
+              <Select.Trigger placeholder="Selectați programul de studii" className="w-full"/>
+              <Select.Content>
+                <Select.Item value="Licență">Licență</Select.Item>
+                <Select.Item value="Master">Master</Select.Item>
+                <Select.Item value="Doctorat">Doctorat</Select.Item>
+              </Select.Content>
+            </Select.Root>
+            <Text size="2" className="text-gray-400 block mt-1">
+              Selectați ciclul de studii urmat.
             </Text>
-          )}
-        </Row>
+            {errors.program && (
+              <Text size="2" color="red" className="block mt-1">
+                {errors.program}
+              </Text>
+            )}
+          </Row>
 
-        {/* Specializare */}
-        <Row>
-          <Label.Root className="block mb-2 text-sm font-medium">Specializare</Label.Root>
-          <TextField.Root
-            className="w-full"
-            placeholder="ex: IS / CTI / Sisteme Distribuite"
-            value={specializare}
-            onChange={(e) => dispatch(setField({field: 'specializare', value: e.target.value}))}
-            aria-invalid={!!errors.specializare}
-          />
-          <Text size="2" className="text-gray-400 block mt-1">
-            Introduceți denumirea completă sau abrevierea specializării.
-          </Text>
-          {errors.specializare && (
-            <Text size="2" color="red" className="block mt-1">
-              {errors.specializare}
+          {/* Specializare */}
+          <Row>
+            <Label.Root className="block mb-2 text-sm font-medium">Specializare</Label.Root>
+            <TextField.Root
+              className="w-full"
+              placeholder="ex: IS / CTI / Sisteme Distribuite"
+              value={specializare}
+              onChange={(e) => dispatch(setField({field: 'specializare', value: e.target.value}))}
+              aria-invalid={!!errors.specializare}
+            />
+            <Text size="2" className="text-gray-400 block mt-1">
+              Introduceți denumirea completă sau abrevierea specializării.
             </Text>
-          )}
-        </Row>
-
-
+            {errors.specializare && (
+              <Text size="2" color="red" className="block mt-1">
+                {errors.specializare}
+              </Text>
+            )}
+          </Row>
 
           {/* An de studiu (depends on Program) */}
           <Row>
@@ -109,7 +108,7 @@ export default function AcademicData() {
             <Label.Root className="block mb-2 text-sm font-medium">Forma de învățământ</Label.Root>
             <Select.Root
               value={forma}
-              onValueChange={(v) => dispatch(setField({field: 'forma', value: v}))}
+              onValueChange={(v) => dispatch(setFormaAndReset(v) as any)}
             >
               <Select.Trigger placeholder="Selectați forma de învățământ" className="w-full"/>
               <Select.Content>
