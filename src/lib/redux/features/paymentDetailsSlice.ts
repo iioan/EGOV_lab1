@@ -91,7 +91,7 @@ const paymentDetailsSlice = createSlice({
         : 'Introduceți numărul de credite.';
     },
 
-    resetPayment: () => initialState,
+    resetPaymentDetails: () => initialState,
   },
 });
 
@@ -100,7 +100,7 @@ export const {
   setPaymentField,
   recomputeTarif,
   validatePayment,
-  resetPayment,
+  resetPaymentDetails,
 } = paymentDetailsSlice.actions;
 
 export default paymentDetailsSlice.reducer;

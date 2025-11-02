@@ -18,9 +18,9 @@ const scholarshipTypeSlice = createSlice({
     validatePayment: (state) => {
       state.errors.scholarshipType = state.scholarshipType ? undefined : 'Selectați regim plată.';
     },
-    resetPayment: () => initialState,
+    resetScholarshipType: () => initialState,
   },
 });
 
-export const {setScholarshipType, validatePayment, resetPayment} = scholarshipTypeSlice.actions;
+export const {setScholarshipType, validatePayment, resetScholarshipType} = scholarshipTypeSlice.actions;
 export default scholarshipTypeSlice.reducer;

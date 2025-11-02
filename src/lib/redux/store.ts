@@ -3,7 +3,6 @@ import studentIdentityReducer from "@/lib/redux/features/studentIdentitySlice";
 import academicDataReducer from "@/lib/redux/features/academicDataSlice";
 import paymentDetailsReducer from '@/lib/redux/features/paymentDetailsSlice';
 import scholarshipTypeReducer from '@/lib/redux/features/scholarshipTypeSlice';
-import paymentTotalReducer from "@/lib/redux/features/paymentTotalSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,7 +10,6 @@ export const store = configureStore({
     academicData: academicDataReducer,
     paymentDetails: paymentDetailsReducer,
     scholarshipType: scholarshipTypeReducer,
-    paymentTotal: paymentTotalReducer,
   },
 });
 
