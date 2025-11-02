@@ -26,6 +26,7 @@ export interface StudentIdentityState {
     cnp?: string;
     codStudent?: string;
     emailInstitutional?: string;
+    telefon?: string;
   };
 }
 

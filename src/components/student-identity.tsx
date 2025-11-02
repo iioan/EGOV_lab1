@@ -33,7 +33,7 @@ const FieldRow: React.FC<{
     <Label.Root className="block mb-2 text-sm font-medium">{label}</Label.Root>
 
     <TextField.Root
-      className="w-full"
+      className="w-full h-10 leading-tight"
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
@@ -66,7 +66,7 @@ export default function StudentIdentity() {
         Date de identificare ale studentului
       </Heading>
 
-      <div className="columns-3 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 mt-4">
         <FieldRow
           label="Nume"
           placeholder="ex: Popescu"
@@ -96,7 +96,7 @@ export default function StudentIdentity() {
 
       </div>
 
-      <div className="columns-3 mt-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 mt-4">
 
         <FieldRow
           label="CNP"
@@ -113,7 +113,7 @@ export default function StudentIdentity() {
           placeholder="ex: AC-23-00125"
           value={state.codStudent}
           onChange={(v) => dispatch(setField({field: 'codStudent', value: v}))}
-          help="Format: LL-CC-CCC; 5–20 caractere (A–Z, 0–9, -, _)."
+          help="Format: LL-CC-C(...); 5–20 caractere (A–Z, 0–9, -, _)."
           error={state.errors.codStudent}
         />
         <FieldRow
@@ -124,6 +124,7 @@ export default function StudentIdentity() {
           help="Număr de contact (opțional)."
           inputMode="tel"
           type="tel"
+          error={state.errors.telefon}
         />
       </div>
     </div>

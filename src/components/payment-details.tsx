@@ -77,7 +77,7 @@ export default function PaymentDetails() {
             {errors.numeCurs && <Text size="2" color="red" className="block mt-1">{errors.numeCurs}</Text>}
           </div>
 
-          <div className="columns-3">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 mt-4">
             {/* Semestru */}
             <div className="mb-5">
               <Label.Root className="block mb-2 text-sm font-medium">Semestru</Label.Root>

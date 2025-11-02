@@ -72,3 +72,10 @@ body {
 .animate-contentShow {
     animation: contentShow 200ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+input, [data-radix-popper-content-wrapper] input {
+    line-height: 1.25rem; /* fix, nu variabil */
+    height: 2.5rem;       /* înălțime constantă */
+    padding: 0 0.75rem;
+    box-sizing: border-box;
+}

@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 export type TipPlata = '' | 'Plată taxă școlarizare' | 'Plată refacere curs';
 
@@ -34,8 +34,10 @@ const getCreditRate = (program: string, specializare: string): number => {
   if (program === 'Master') {
     return 150; // fallback
   }
-  // Doctorat:
-  return 200;
+  if (program === 'Doctorat') {
+    return 150; // fallback
+  }
+  return 0;
 };
 
 const parseIntSafe = (v: string) => {
@@ -59,7 +61,7 @@ const paymentDetailsSlice = createSlice({
         value: string;
       }>
     ) => {
-      const { field, value } = action.payload;
+      const {field, value} = action.payload;
       state[field] = value as any;
 
       // live validation
@@ -70,8 +72,19 @@ const paymentDetailsSlice = createSlice({
         state.errors.semestru = value ? undefined : 'Selectați semestrul.';
       }
       if (field === 'numarCredite') {
-        const n = parseIntSafe(value);
-        state.errors.numarCredite = n > 0 ? undefined : 'Introduceți numărul de credite.';
+        const numericValue = Number(value);
+        if (isNaN(numericValue)) {
+          state.errors.numarCredite = 'Introduceți un număr valid.';
+          return;
+        }
+        if (numericValue > 15) {
+          state.errors.numarCredite = 'Numărul maxim de credite este 15.';
+          state.numarCredite = '15';
+          return;
+        }
+        state.errors.numarCredite = '';
+        state.numarCredite = numericValue.toString();
+        return;
       }
     },
 
