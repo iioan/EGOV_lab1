@@ -1,5 +1,6 @@
 import type {Metadata} from "next";
 import "./globals.css";
+import "@radix-ui/themes/styles.css";
 import {Theme} from "@radix-ui/themes";
 import {StoreProvider} from "@/lib/redux/StoreProvider";
 
