@@ -7,6 +7,7 @@ import AcademicData from "@/components/academic-data";
 import PaymentDetails from "@/components/payment-details";
 import ScholarshipType from "@/components/scholarship-type";
 import TotalPayment from "@/components/total-payment";
+import FormSubmit from "@/components/form-submit";
 
 export default function Home() {
   return (
@@ -32,6 +33,7 @@ export default function Home() {
           <PaymentDetails/>
           <ScholarshipType/>
           <TotalPayment/>
+          <FormSubmit/>
         </section>
       </main>
     </>

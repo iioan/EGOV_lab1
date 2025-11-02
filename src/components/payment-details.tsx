@@ -35,7 +35,7 @@ export default function PaymentDetails() {
           </Heading>
 
           {/* Tip plată */}
-          <div className="mb-5">
+          <div className="mb-5 mt-4">
             <Label.Root className="block mb-2 text-sm font-medium">Tip plată</Label.Root>
             <Select.Root value={tipPlata} onValueChange={(v) => dispatch(setTipPlata(v as any))}>
               <Select.Trigger placeholder="Alegeți tipul plății" className="w-full"/>
