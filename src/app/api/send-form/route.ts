@@ -1,9 +1,9 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/utils/supabase';
-import { mapReduxStateToPaymentEntity, PaymentEntity } from '@/lib/models/payment';
-import { ReduxPaymentState } from '@/lib/types/reduxState';
-import { generatePaymentXML } from '@/utils/xmlGenerator';
-import { uploadPaymentXML } from '@/lib/services/storageService';
+import {NextResponse} from 'next/server';
+import {supabase} from '@/utils/supabase';
+import {mapReduxStateToPaymentEntity, PaymentEntity} from '@/lib/models/payment';
+import {ReduxPaymentState} from '@/lib/types/reduxState';
+import {generatePaymentXML} from '@/utils/xmlGenerator';
+import {uploadPaymentXML} from '@/lib/services/storageService';
 
 export async function POST(req: Request) {
   try {
@@ -14,8 +14,8 @@ export async function POST(req: Request) {
     // Basic sanity checks
     if (!data?.studentIdentity || !data?.academicData) {
       return NextResponse.json(
-        { ok: false, error: 'Missing required slices in payload.' },
-        { status: 400 }
+        {ok: false, error: 'Missing required slices in payload.'},
+        {status: 400}
       );
     }
 
@@ -44,7 +44,7 @@ export async function POST(req: Request) {
     };
 
     // Insert into database
-    const { data: insertedData, error: supabaseError } = await supabase
+    const {data: insertedData, error: supabaseError} = await supabase
       .from('payments')
       .insert([dbPayload])
       .select()
@@ -58,7 +58,7 @@ export async function POST(req: Request) {
           error: 'Failed to save payment to database.',
           details: supabaseError.message
         },
-        { status: 500 }
+        {status: 500}
       );
     }
 
@@ -68,11 +68,13 @@ export async function POST(req: Request) {
     const xmlContent = generatePaymentXML(data, insertedData.id);
 
     // Upload XML to Supabase Storage
-    const uploadResult = await uploadPaymentXML(xmlContent, insertedData.id);
+    const uploadResult = await uploadPaymentXML(
+      xmlContent,
+      insertedData.id,
+      insertedData.nume,
+      insertedData.prenume);
 
     if (!uploadResult.success) {
-      // Don't fail the entire request if XML upload fails
-      // but log it for monitoring
       return NextResponse.json({
         ok: true,
         message: 'Payment saved successfully, but XML upload failed',
@@ -96,8 +98,8 @@ export async function POST(req: Request) {
     const error = e as Error;
     console.error('send-form error:', error);
     return NextResponse.json(
-      { ok: false, error: 'Invalid request or server error.', details: error?.message },
-      { status: 400 }
+      {ok: false, error: 'Invalid request or server error.', details: error?.message},
+      {status: 400}
     );
   }
 }

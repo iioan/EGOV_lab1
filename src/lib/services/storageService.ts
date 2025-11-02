@@ -15,13 +15,23 @@ export interface UploadXMLResult {
  */
 export async function uploadPaymentXML(
   xmlContent: string,
-  paymentId: number
+  paymentId: number,
+  nume: string,
+  prenume: string
 ): Promise<UploadXMLResult> {
   try {
-    const fileName = `payment_${paymentId}_${Date.now()}.xml`;
+    const now = new Date();
+    const datetime = now.toISOString()
+      .replace(/[-:]/g, '')
+      .replace('T', '_')
+      .split('.')[0];
+
+    const sanitizedNume = nume.replace(/[^a-zA-Z0-9]/g, '_');
+    const sanitizedPrenume = prenume.replace(/[^a-zA-Z0-9]/g, '_');
+
+    const fileName = `${datetime}_${sanitizedNume}_${sanitizedPrenume}_payment.xml`;
     const filePath = `xmls/${fileName}`;
 
-    // Upload XML to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
       .from('documents')
       .upload(filePath, xmlContent, {
