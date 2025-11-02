@@ -6,6 +6,7 @@ import StudentIdentity from "@/components/student-identity";
 import AcademicData from "@/components/academic-data";
 import PaymentDetails from "@/components/payment-details";
 import ScholarshipType from "@/components/scholarship-type";
+import TotalPayment from "@/components/total-payment";
 
 export default function Home() {
   return (
@@ -30,6 +31,7 @@ export default function Home() {
           <AcademicData/>
           <PaymentDetails/>
           <ScholarshipType/>
+          <TotalPayment/>
         </section>
       </main>
     </>

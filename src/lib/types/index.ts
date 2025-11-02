@@ -43,15 +43,24 @@ export interface AcademicState {
   };
 }
 
-export interface PaymentState {
-  tipPlata: TipPlata;
-  errors: { tipPlata?: string };
-};
-
 export interface ScholarshipState {
   scholarshipType: string;
   errors: {
     hasScholarship?: string;
     scholarshipType?: string;
+  };
+}
+
+export interface PaymentState {
+  tipPlata: TipPlata;
+  numeCurs: string;
+  semestru: '' | '1' | '2';
+  numarCredite: string;
+  tarifCurs: number;
+  errors: {
+    tipPlata?: string;
+    numeCurs?: string;
+    semestru?: string;
+    numarCredite?: string;
   };
 }

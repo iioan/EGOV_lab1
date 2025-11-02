@@ -1,22 +1,7 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {PaymentState} from "@/lib/types";
 
 export type TipPlata = '' | 'Plată taxă școlarizare' | 'Plată refacere curs';
-
-type PaymentState = {
-  tipPlata: TipPlata;
-
-  numeCurs: string;
-  semestru: '' | '1' | '2';
-  numarCredite: string;  // păstrăm ca string pentru binding; validăm numeric
-  tarifCurs: number;
-
-  errors: {
-    tipPlata?: string;
-    numeCurs?: string;
-    semestru?: string;
-    numarCredite?: string;
-  };
-};
 
 const initialState: PaymentState = {
   tipPlata: '',
@@ -35,7 +20,7 @@ const getCreditRate = (program: string, specializare: string): number => {
     return 150; // fallback
   }
   if (program === 'Doctorat') {
-    return 150; // fallback
+    return 200; // fallback
   }
   return 0;
 };
