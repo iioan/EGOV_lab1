@@ -26,6 +26,7 @@ export default function AcademicData() {
 
       {/* Program de studii */}
       <div className="mt-4">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-x-6 gap-y-6 mt-4">
         <Row>
           <Label.Root className="block mb-2 text-sm font-medium">Program de studii</Label.Root>
           <Select.Root
@@ -69,7 +70,7 @@ export default function AcademicData() {
           )}
         </Row>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-6 mt-4">
+
 
           {/* An de studiu (depends on Program) */}
           <Row>
