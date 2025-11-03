@@ -68,6 +68,14 @@ export default function StudentIdentity() {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-x-6 gap-y-6 mt-4">
         <FieldRow
+          label="Prenume"
+          placeholder="ex: Ana-Maria"
+          value={state.prenume}
+          onChange={(v) => dispatch(setField({field: 'prenume', value: v}))}
+          help="Prenumele complet (folosiți cratimă dacă este cazul)."
+        />
+
+        <FieldRow
           label="Nume"
           placeholder="ex: Popescu"
           value={state.nume}
@@ -75,13 +83,6 @@ export default function StudentIdentity() {
           help="Numele de familie al studentului."
         />
 
-        <FieldRow
-          label="Prenume"
-          placeholder="ex: Ana-Maria"
-          value={state.prenume}
-          onChange={(v) => dispatch(setField({field: 'prenume', value: v}))}
-          help="Prenumele complet (folosiți cratimă dacă este cazul)."
-        />
         <FieldRow
           label="Email instituțional"
           placeholder="ex: ana.popescu@student.univ.ro"

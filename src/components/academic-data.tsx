@@ -71,7 +71,7 @@ export default function AcademicData() {
             )}
           </Row>
 
-          {/* An de studiu (depends on Program) */}
+          {/* An de studiu */}
           <Row>
             <Label.Root className="block mb-2 text-sm font-medium">An de studiu</Label.Root>
             <Select.Root

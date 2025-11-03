@@ -14,7 +14,7 @@ const initialState: StudentIdentityState = {
 const isValidCNP = (v: string) =>
   /^\d{13}$/.test(v); // 13 digits
 const isValidTelefon = (v: string) =>
-  /^\d{10}$/.test(v); // 10 digits
+  /^07\d{8}$/.test(v);
 const isValidCodStudent = (v: string) =>
   /^[A-Z]{2}-\d{2}-\d+$/.test(v);
 const isValidInstitutionalEmail = (v: string) => {
@@ -59,7 +59,7 @@ const studentIdentitySlice = createSlice({
           : (isValidInstitutionalEmail(value) ? undefined : 'Email instituțional invalid.');
       }
       if (field === 'telefon') {
-        state.errors.telefon = isValidTelefon(value) ? undefined : 'Numarul de telefon trebuie să conțină 10 cifre.';
+        state.errors.telefon = isValidTelefon(value) ? undefined : 'Numărul de telefon trebuie să aibă 10 cifre și să înceapă cu \'07\'.';
       }
     },
     validateAll: (state) => {
