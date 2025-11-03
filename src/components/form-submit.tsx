@@ -14,7 +14,7 @@ export default function FormSubmit() {
   const academicData = useSelector((s: RootState) => s.academicData);
   const paymentDetails = useSelector((s: RootState) => s.paymentDetails);
   const scholarshipType = useSelector((s: RootState) => s.scholarshipType);
-  const paymentTotal = useSelector((s: RootState) => (s as any).paymentTotal); // if present
+  const paymentTotal = useSelector((s: RootState) => (s as any).paymentTotal);
 
   // Your existing validity rules
   const isFormValid =
@@ -37,7 +37,7 @@ export default function FormSubmit() {
         academicData,
         paymentDetails,
         scholarshipType,
-        paymentTotal, // safe even if undefined
+        paymentTotal,
       };
 
       const res = await fetch('/api/send-form', {
@@ -52,9 +52,23 @@ export default function FormSubmit() {
         throw new Error(json?.error || 'Unknown error while sending form.');
       }
 
-      alert('Formular trimis cu succes!');
+      // Download PDF if available
+      if (json.pdfFile?.url && json.pdfFile?.filename) {
+        const link = document.createElement('a');
+        link.href = json.pdfFile.url;
+        link.download = json.pdfFile.filename;
+        link.target = '_blank';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        alert('Formular trimis cu succes! Ordinul de plată a fost descărcat.');
+      } else {
+        alert('Formular trimis cu succes!');
+      }
+
       // TODO: optionally reset your Redux slices here if desired
-      // dispatch(resetAll()); — depending on how you’ve implemented slice resets
+      // dispatch(resetAll()); — depending on how you've implemented slice resets
     } catch (e: any) {
       console.error(e);
       setError(e?.message ?? 'A apărut o problemă.');

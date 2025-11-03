@@ -64,3 +64,11 @@ export interface PaymentState {
     numarCredite?: string;
   };
 }
+
+export interface UploadPDFResult {
+  success: boolean;
+  path?: string;
+  url?: string;
+  error?: string;
+  filename?: string;
+}
