@@ -215,9 +215,12 @@ function computePaymentTypeStats(payments: PaymentRecord[]): PaymentTypeStats[] 
 /**
  * Extracts capital letters from a string to create an acronym
  * e.g., "Structuri de Date si Algoritmi" -> "SDA"
+ * Returns uppercase acronym or empty string if no capital letters found
  */
 function extractAcronym(text: string): string {
-  return text.replace(/[^A-Z]/g, '');
+  if (!text) return '';
+  const acronym = text.replace(/[^A-Z]/g, '');
+  return acronym.toUpperCase();
 }
 
 /**
@@ -240,10 +243,10 @@ function computeTopCourses(payments: PaymentRecord[]): CourseStats[] {
     const courseName = payment.nume_curs.trim();
     const acronym = extractAcronym(courseName);
     
-    // If the course name has multiple words (likely a full name)
+    // If the course name has multiple words (likely a full name) and has valid acronym
     if (courseName.includes(' ') && acronym.length >= 2) {
       courseNameToAcronym[courseName] = acronym;
-      // Keep the first encountered full name as canonical
+      // Keep the first encountered full name as canonical (acronym is already uppercase)
       if (!acronymToCanonicalName[acronym]) {
         acronymToCanonicalName[acronym] = courseName;
       }
