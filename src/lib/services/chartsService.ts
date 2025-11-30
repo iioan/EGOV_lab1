@@ -19,9 +19,9 @@ Chart.register(...registerables);
 try {
   const fontPath = path.join(process.cwd(), 'public', 'fonts', 'DejaVuSans.ttf');
   registerFont(fontPath, { family: 'DejaVu Sans' });
-} catch {
+} catch (error) {
   // Font registration may fail in some environments, charts will use fallback fonts
-  console.warn('Could not register custom font for charts');
+  console.warn('Could not register custom font for charts:', error);
 }
 
 // Chart dimensions
@@ -146,8 +146,7 @@ function createBarConfig(
           text: title,
           font: { size: 18, weight: 'bold', family: 'DejaVu Sans' },
         },
-        legend: { display: false, labels: { font: { size: 16, family: 'DejaVu Sans' } }, },
-
+        legend: { display: false, labels: { font: { size: 16, family: 'DejaVu Sans' } } },
       },
       scales: {
         x: {
