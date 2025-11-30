@@ -1,7 +1,7 @@
 # Use an official Node image with Debian so we can install native deps
 FROM node:20-bullseye-slim AS base
 
-# Install system dependencies needed by node-canvas and fonts for chart text rendering
+# Install system dependencies needed by node-canvas
 RUN apt-get update && apt-get install -y \
     libcairo2 \
     libcairo2-dev \
@@ -16,10 +16,7 @@ RUN apt-get update && apt-get install -y \
     libpixman-1-0 \
     libpixman-1-dev \
     build-essential \
-    fontconfig \
-    fonts-dejavu-core \
-    && rm -rf /var/lib/apt/lists/* \
-    && fc-cache -f -v
+    && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
@@ -40,7 +37,7 @@ RUN npm run build
 # --- Production runtime image (optional but recommended) ---
 FROM node:20-bullseye-slim AS runner
 
-# Install runtime libs for canvas (no dev headers needed now) and fonts for chart text rendering
+# Install runtime libs for canvas (no dev headers needed now)
 RUN apt-get update && apt-get install -y \
     libcairo2 \
     libpango1.0-0 \
@@ -48,10 +45,7 @@ RUN apt-get update && apt-get install -y \
     libgif7 \
     librsvg2-2 \
     libpixman-1-0 \
-    fontconfig \
-    fonts-dejavu-core \
-    && rm -rf /var/lib/apt/lists/* \
-    && fc-cache -f -v
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
