@@ -1,5 +1,6 @@
-import { createCanvas } from 'canvas';
+import { createCanvas, registerFont } from 'canvas';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
+import path from 'path';
 import {
   ReportData,
   ProgramStats,
@@ -13,6 +14,15 @@ import {
 
 // Register all Chart.js components
 Chart.register(...registerables);
+
+// Register custom font for chart text rendering (fixes squares issue on Vercel/serverless)
+try {
+  const fontPath = path.join(process.cwd(), 'public', 'fonts', 'DejaVuSans.ttf');
+  registerFont(fontPath, { family: 'DejaVu Sans' });
+} catch (error) {
+  // Font registration may fail in some environments, charts will use fallback fonts
+  console.warn('Could not register custom font for charts:', error);
+}
 
 // Chart dimensions
 const CHART_WIDTH = 700;
@@ -93,11 +103,11 @@ function createPieConfig(
         title: {
           display: true,
           text: title,
-          font: { size: 18, weight: 'bold' },
+          font: { size: 18, weight: 'bold', family: 'DejaVu Sans' },
         },
         legend: {
           position: 'bottom',
-          labels: { font: { size: 16 } },
+          labels: { font: { size: 16, family: 'DejaVu Sans' } },
         },
       },
     },
@@ -134,20 +144,19 @@ function createBarConfig(
         title: {
           display: true,
           text: title,
-          font: { size: 18, weight: 'bold' },
+          font: { size: 18, weight: 'bold', family: 'DejaVu Sans' },
         },
-        legend: { display: false, labels: { font: { size: 16 } }, },
-
+        legend: { display: false, labels: { font: { size: 16, family: 'DejaVu Sans' } } },
       },
       scales: {
         x: {
           grid: {color: COLORS.border},
-          ticks: {font: {size: 16}}
+          ticks: {font: {size: 16, family: 'DejaVu Sans'}}
         },
         y: {
           grid: {color: COLORS.border},
           beginAtZero: true,
-          ticks: {font: {size: 16}}
+          ticks: {font: {size: 16, family: 'DejaVu Sans'}}
         },
       },
     },
@@ -185,13 +194,13 @@ function createLineConfig(
         title: {
           display: true,
           text: title,
-          font: { size: 18, weight: 'bold' },
+          font: { size: 18, weight: 'bold', family: 'DejaVu Sans' },
         },
         legend: { display: false },
       },
       scales: {
-        x: { grid: { color: COLORS.border } },
-        y: { grid: { color: COLORS.border }, beginAtZero: true },
+        x: { grid: { color: COLORS.border }, ticks: { font: { family: 'DejaVu Sans' } } },
+        y: { grid: { color: COLORS.border }, beginAtZero: true, ticks: { font: { family: 'DejaVu Sans' } } },
       },
     },
   };
@@ -403,7 +412,7 @@ function generatePlaceholderChart(message: string): string {
         title: {
           display: true,
           text: message,
-          font: { size: 16 },
+          font: { size: 16, family: 'DejaVu Sans' },
         },
         legend: { display: false },
       },
