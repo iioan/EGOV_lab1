@@ -1,6 +1,7 @@
 import React from 'react';
-import {Document, Font, Page, StyleSheet, Text, View,} from '@react-pdf/renderer';
+import {Document, Font, Image, Page, StyleSheet, Text, View,} from '@react-pdf/renderer';
 import {ReportData} from '@/lib/services/reportDataService';
+import {ReportCharts} from '@/lib/services/chartsService';
 
 Font.register({
   family: 'Helvetica',
@@ -47,6 +48,10 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     borderTopColor: '#E0E0E0',
     paddingTop: 8,
+  },
+  footerText: {
+    fontSize: 7,
+    color: '#BDC3C7',
   },
   pageNumber: {
     fontSize: 7,
@@ -107,6 +112,30 @@ const styles = StyleSheet.create({
     fontSize: 10,
     fontWeight: 'bold',
     color: '#495057',
+  },
+  // Chart styles - smaller for zoomed out effect
+  chartContainer: {
+    marginVertical: 10,
+    alignItems: 'center',
+  },
+  chartImage: {
+    width: 500,
+    height: 280,
+    objectFit: 'contain',
+  },
+  chartRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 8,
+  },
+  chartHalf: {
+    width: '48%',
+    alignItems: 'center',
+  },
+  chartImageSmall: {
+    width: 280,
+    height: 180,
+    objectFit: 'contain',
   },
   // Table styles
   table: {
@@ -206,6 +235,7 @@ function formatDate(dateStr: string): string {
 
 interface PaymentsReportDocumentProps {
   data: ReportData;
+  charts: ReportCharts;
 }
 
 /**
@@ -266,7 +296,7 @@ const OverviewSection: React.FC<{ data: ReportData }> = ({data}) => (
 /**
  * Program Analysis Section Component
  */
-const ProgramSection: React.FC<{ data: ReportData }> = ({data}) => (
+const ProgramSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>2. Analiza per Program de Studii</Text>
 
@@ -287,13 +317,19 @@ const ProgramSection: React.FC<{ data: ReportData }> = ({data}) => (
         </Text>
       </View>
     ))}
+    <View style={styles.chartContainer}>
+      <Image src={charts.programPieChart} style={styles.chartImage}/>
+    </View>
+    <View style={styles.chartContainer}>
+      <Image src={charts.programBarChart} style={styles.chartImage}/>
+    </View>
   </View>
 );
 
 /**
  * Specialization Analysis Section Component
  */
-const SpecializationSection: React.FC<{ data: ReportData }> = ({data}) => (
+const SpecializationSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View wrap={false}>
     <Text style={styles.sectionTitle}>3. Analiza per Specializare</Text>
 
@@ -314,13 +350,17 @@ const SpecializationSection: React.FC<{ data: ReportData }> = ({data}) => (
         </Text>
       </View>
     ))}
+
+    <View style={styles.chartContainer}>
+      <Image src={charts.specializationBarChart} style={styles.chartImage}/>
+    </View>
   </View>
 );
 
 /**
  * Payment Type Analysis Section Component
  */
-const PaymentTypeSection: React.FC<{ data: ReportData }> = ({data}) => (
+const PaymentTypeSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>4. Analiza per Tip Plata</Text>
 
@@ -355,13 +395,20 @@ const PaymentTypeSection: React.FC<{ data: ReportData }> = ({data}) => (
         </Text>
       </View>
     ))}
+
+      <View style={styles.chartContainer}>
+        <Image src={charts.paymentTypePieChart} style={styles.chartImage}/>
+      </View>
+      <View style={styles.chartContainer}>
+        <Image src={charts.paymentTypeAmountBarChart} style={styles.chartImage}/>
+      </View>
   </View>
 );
 
 /**
  * Course Retakes Section Component
  */
-const CourseRetakesSection: React.FC<{ data: ReportData }> = ({data}) => (
+const CourseRetakesSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>5. Analiza Refaceri Curs</Text>
 
@@ -371,22 +418,28 @@ const CourseRetakesSection: React.FC<{ data: ReportData }> = ({data}) => (
     </Text>
 
     {data.topCourses.length > 0 ? (
-      <View style={styles.table}>
-        <View style={styles.tableHeader}>
-          <Text style={[styles.tableHeaderCell, {flex: 0.5}]}>#</Text>
-          <Text style={[styles.tableHeaderCell, {flex: 2}]}>Curs</Text>
-          <Text style={styles.tableHeaderCell}>Plati</Text>
-          <Text style={styles.tableHeaderCell}>Suma</Text>
-        </View>
-        {data.topCourses.map((course, index) => (
-          <View key={index} style={index % 2 === 1 ? [styles.tableRow, styles.tableRowAlt] : styles.tableRow}>
-            <Text style={[styles.tableCell, {flex: 0.5}]}>{index + 1}</Text>
-            <Text style={[styles.tableCell, {flex: 2}]}>{course.courseName}</Text>
-            <Text style={styles.tableCell}>{course.count}</Text>
-            <Text style={styles.tableCell}>{formatCurrency(course.totalAmount)}</Text>
+      <>
+        <View style={styles.table}>
+          <View style={styles.tableHeader}>
+            <Text style={[styles.tableHeaderCell, {flex: 0.5}]}>#</Text>
+            <Text style={[styles.tableHeaderCell, {flex: 2}]}>Curs</Text>
+            <Text style={styles.tableHeaderCell}>Plati</Text>
+            <Text style={styles.tableHeaderCell}>Suma</Text>
           </View>
-        ))}
-      </View>
+          {data.topCourses.map((course, index) => (
+            <View key={index} style={index % 2 === 1 ? [styles.tableRow, styles.tableRowAlt] : styles.tableRow}>
+              <Text style={[styles.tableCell, {flex: 0.5}]}>{index + 1}</Text>
+              <Text style={[styles.tableCell, {flex: 2}]}>{course.courseName}</Text>
+              <Text style={styles.tableCell}>{course.count}</Text>
+              <Text style={styles.tableCell}>{formatCurrency(course.totalAmount)}</Text>
+            </View>
+          ))}
+        </View>
+
+        <View style={styles.chartContainer}>
+          <Image src={charts.topCoursesBarChart} style={styles.chartImage}/>
+        </View>
+      </>
     ) : (
       <Text style={styles.paragraph}>
         Nu exista plati pentru refacere curs inregistrate.
@@ -398,7 +451,7 @@ const CourseRetakesSection: React.FC<{ data: ReportData }> = ({data}) => (
 /**
  * Credits Analysis Section Component
  */
-const CreditsSection: React.FC<{ data: ReportData }> = ({data}) => (
+const CreditsSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>6. Analiza per Numar Credite</Text>
 
@@ -416,6 +469,10 @@ const CreditsSection: React.FC<{ data: ReportData }> = ({data}) => (
             </Text>
           </View>
         ))}
+
+        <View style={styles.chartContainer}>
+          <Image src={charts.creditsBarChart} style={styles.chartImage}/>
+        </View>
       </>
     ) : (
       <Text style={styles.paragraph}>
@@ -428,7 +485,7 @@ const CreditsSection: React.FC<{ data: ReportData }> = ({data}) => (
 /**
  * Form of Education Section Component
  */
-const FormaSection: React.FC<{ data: ReportData }> = ({data}) => (
+const FormaSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>7. Analiza Forma de Invatamant</Text>
 
@@ -454,13 +511,22 @@ const FormaSection: React.FC<{ data: ReportData }> = ({data}) => (
         </Text>
       </View>
     )}
+
+    <View style={styles.chartRow}>
+      <View style={styles.chartHalf}>
+        <Image src={charts.formaBarChart} style={styles.chartImageSmall}/>
+      </View>
+      <View style={styles.chartHalf}>
+        <Image src={charts.formaPieChart} style={styles.chartImageSmall}/>
+      </View>
+    </View>
   </View>
 );
 
 /**
  * Scholarship Type Section Component
  */
-const ScholarshipSection: React.FC<{ data: ReportData }> = ({data}) => (
+const ScholarshipSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>8. Analiza Regim Taxare</Text>
 
@@ -486,6 +552,15 @@ const ScholarshipSection: React.FC<{ data: ReportData }> = ({data}) => (
             Media pe plata: {formatCurrency(data.scholarshipStats[0]?.averageAmount || 0)}.
           </Text>
         </View>
+
+        <View style={styles.chartRow}>
+          <View style={styles.chartHalf}>
+            <Image src={charts.scholarshipPieChart} style={styles.chartImageSmall}/>
+          </View>
+          <View style={styles.chartHalf}>
+            <Image src={charts.scholarshipBarChart} style={styles.chartImageSmall}/>
+          </View>
+        </View>
       </>
     ) : (
       <Text style={styles.paragraph}>
@@ -498,7 +573,7 @@ const ScholarshipSection: React.FC<{ data: ReportData }> = ({data}) => (
 /**
  * Financial Analysis Section Component
  */
-const FinancialSection: React.FC<{ data: ReportData }> = ({data}) => (
+const FinancialSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>9. Analiza Financiara</Text>
 
@@ -524,13 +599,17 @@ const FinancialSection: React.FC<{ data: ReportData }> = ({data}) => (
         <Text style={styles.statValue}>{range.count} plati</Text>
       </View>
     ))}
+
+    <View style={styles.chartContainer}>
+      <Image src={charts.financialRangesBarChart} style={styles.chartImage}/>
+    </View>
   </View>
 );
 
 /**
  * Time Analysis Section Component
  */
-const TimeSection: React.FC<{ data: ReportData }> = ({data}) => (
+const TimeSection: React.FC<{ data: ReportData; charts: ReportCharts }> = ({data, charts}) => (
   <View>
     <Text style={styles.sectionTitle}>10. Analiza Temporala</Text>
 
@@ -546,72 +625,66 @@ const TimeSection: React.FC<{ data: ReportData }> = ({data}) => (
     </View>
 
     <View style={styles.subsectionTitle}>
-      <Text>Ultimele 7 zile cu plati</Text>
+      <Text>Evolutie Plati in Timp</Text>
     </View>
 
-    {data.timeStats.dailyPayments.slice(-7).map((day, index) => (
-      <View key={index} style={styles.statRow}>
-        <Text style={styles.statLabel}>{day.date}</Text>
-        <Text style={styles.statValue}>{day.count} plati</Text>
-      </View>
-    ))}
+    <View style={styles.chartContainer}>
+      <Image src={charts.dailyPaymentsLineChart} style={styles.chartImage}/>
+    </View>
 
     <View style={styles.subsectionTitle}>
       <Text>Distributie pe Ore</Text>
     </View>
 
-    {data.timeStats.hourlyDistribution.map((hour, index) => (
-      <View key={index} style={styles.statRow}>
-        <Text style={styles.statLabel}>{hour.hour}</Text>
-        <Text style={styles.statValue}>{hour.count} plati</Text>
-      </View>
-    ))}
+    <View style={styles.chartContainer}>
+      <Image src={charts.hourlyDistributionBarChart} style={styles.chartImage}/>
+    </View>
   </View>
 );
 
 /**
  * Main Payments Report Document Component
  */
-export const PaymentsReportDocument: React.FC<PaymentsReportDocumentProps> = ({data}) => (
+export const PaymentsReportDocument: React.FC<PaymentsReportDocumentProps> = ({data, charts}) => (
   <Document>
 
     {/* Overview and Program Analysis */}
     <Page size="A4" style={styles.page}>
       <PageHeader title="Raport Statistic - Plati Universitate" date={data.generatedAt}/>
       <OverviewSection data={data}/>
-      <ProgramSection data={data}/>
+      <ProgramSection data={data} charts={charts}/>
       <PageFooter/>
     </Page>
 
     {/* Specialization and Payment Type Analysis */}
     <Page size="A4" style={styles.page}>
       <PageHeader title="Raport Statistic - Plati Universitate" date={data.generatedAt}/>
-      <SpecializationSection data={data}/>
-      <PaymentTypeSection data={data}/>
+      <SpecializationSection data={data} charts={charts}/>
+      <PaymentTypeSection data={data} charts={charts}/>
       <PageFooter/>
     </Page>
 
     {/* Course Retakes and Credits */}
     <Page size="A4" style={styles.page}>
       <PageHeader title="Raport Statistic - Plati Universitate" date={data.generatedAt}/>
-      <CourseRetakesSection data={data}/>
-      <CreditsSection data={data}/>
+      <CourseRetakesSection data={data} charts={charts}/>
+      <CreditsSection data={data} charts={charts}/>
       <PageFooter/>
     </Page>
 
     {/* Form of Education and Scholarship Type */}
     <Page size="A4" style={styles.page}>
       <PageHeader title="Raport Statistic - Plati Universitate" date={data.generatedAt}/>
-      <FormaSection data={data}/>
-      <ScholarshipSection data={data}/>
+      <FormaSection data={data} charts={charts}/>
+      <ScholarshipSection data={data} charts={charts}/>
       <PageFooter/>
     </Page>
 
     {/* Financial and Time Analysis */}
     <Page size="A4" style={styles.page}>
       <PageHeader title="Raport Statistic - Plati Universitate" date={data.generatedAt}/>
-      <FinancialSection data={data}/>
-      <TimeSection data={data}/>
+      <FinancialSection data={data} charts={charts}/>
+      <TimeSection data={data} charts={charts}/>
       <PageFooter/>
     </Page>
   </Document>
