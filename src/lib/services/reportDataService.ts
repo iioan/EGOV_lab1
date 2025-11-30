@@ -158,12 +158,15 @@ function computeProgramStats(payments: PaymentRecord[]): ProgramStats[] {
 
 /**
  * Computes specialization distribution statistics
+ * Normalizes specializations to uppercase to group case-insensitive variants
+ * (e.g., 'cti' and 'CTI' are counted together as 'CTI')
  */
 function computeSpecializationStats(payments: PaymentRecord[]): SpecializationStats[] {
   const specCounts: Record<string, { count: number; totalAmount: number }> = {};
 
   payments.forEach(payment => {
-    const spec = payment.specializare || 'Necunoscut';
+    // Normalize specialization to uppercase for case-insensitive grouping
+    const spec = payment.specializare ? payment.specializare.toUpperCase() : 'Necunoscut';
     if (!specCounts[spec]) {
       specCounts[spec] = { count: 0, totalAmount: 0 };
     }
@@ -210,23 +213,65 @@ function computePaymentTypeStats(payments: PaymentRecord[]): PaymentTypeStats[] 
 }
 
 /**
+ * Extracts capital letters from a string to create an acronym
+ * e.g., "Structuri de Date si Algoritmi" -> "SDA"
+ */
+function extractAcronym(text: string): string {
+  return text.replace(/[^A-Z]/g, '');
+}
+
+/**
  * Computes top courses for course retake payments
+ * Matches full course names with their acronyms by extracting capitals
+ * from full names and grouping them with shortened titles
+ * (e.g., 'Structuri de Date si Algoritmi' and 'SDA' are counted together)
  */
 function computeTopCourses(payments: PaymentRecord[]): CourseStats[] {
-  const courseCounts: Record<string, { count: number; totalAmount: number }> = {};
-
   // Filter only course retake payments (Plată refacere curs)
   const retakePayments = payments.filter(p =>
     p.tip_plata === 'Plată refacere curs' && p.nume_curs
   );
 
+  // First pass: collect all course names and identify acronyms
+  const courseNameToAcronym: Record<string, string> = {};
+  const acronymToCanonicalName: Record<string, string> = {};
+
   retakePayments.forEach(payment => {
-    const course = payment.nume_curs;
-    if (!courseCounts[course]) {
-      courseCounts[course] = { count: 0, totalAmount: 0 };
+    const courseName = payment.nume_curs.trim();
+    const acronym = extractAcronym(courseName);
+    
+    // If the course name has multiple words (likely a full name)
+    if (courseName.includes(' ') && acronym.length >= 2) {
+      courseNameToAcronym[courseName] = acronym;
+      // Keep the first encountered full name as canonical
+      if (!acronymToCanonicalName[acronym]) {
+        acronymToCanonicalName[acronym] = courseName;
+      }
     }
-    courseCounts[course].count++;
-    courseCounts[course].totalAmount += payment.final_amount || 0;
+  });
+
+  // Second pass: aggregate counts using normalized names
+  const courseCounts: Record<string, { count: number; totalAmount: number }> = {};
+
+  retakePayments.forEach(payment => {
+    const courseName = payment.nume_curs.trim();
+    let normalizedName = courseName;
+    
+    // Check if this is a short name (acronym) that matches a full course name
+    const isShortName = !courseName.includes(' ') && courseName.length <= 10;
+    if (isShortName && acronymToCanonicalName[courseName.toUpperCase()]) {
+      // Use the canonical full name
+      normalizedName = acronymToCanonicalName[courseName.toUpperCase()];
+    } else if (courseNameToAcronym[courseName]) {
+      // This is a full name, use it as canonical
+      normalizedName = courseName;
+    }
+
+    if (!courseCounts[normalizedName]) {
+      courseCounts[normalizedName] = { count: 0, totalAmount: 0 };
+    }
+    courseCounts[normalizedName].count++;
+    courseCounts[normalizedName].totalAmount += payment.final_amount || 0;
   });
 
   return Object.entries(courseCounts)
