@@ -28,12 +28,36 @@ const CHART_HEIGHT = 300;
 // Maximum length for course names in charts
 const MAX_COURSE_NAME_LENGTH = 20;
 
-// Color palette for charts
+// Color palette for charts - vibrant and colorful!
 const COLORS = {
-  primary: ['#4F46E5', '#7C3AED', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#EF4444', '#8B5CF6'],
-  primaryAlpha: ['rgba(79, 70, 229, 0.7)', 'rgba(124, 58, 237, 0.7)', 'rgba(236, 72, 153, 0.7)', 
-                 'rgba(245, 158, 11, 0.7)', 'rgba(16, 185, 129, 0.7)', 'rgba(59, 130, 246, 0.7)',
-                 'rgba(239, 68, 68, 0.7)', 'rgba(139, 92, 246, 0.7)'],
+  primary: [
+    '#FF6384', // Pink/Red
+    '#36A2EB', // Blue
+    '#FFCE56', // Yellow
+    '#4BC0C0', // Teal
+    '#9966FF', // Purple
+    '#FF9F40', // Orange
+    '#7CFC00', // Lime Green
+    '#FF69B4', // Hot Pink
+    '#00CED1', // Dark Turquoise
+    '#FFD700', // Gold
+    '#DC143C', // Crimson
+    '#00FA9A', // Medium Spring Green
+  ],
+  primaryAlpha: [
+    'rgba(255, 99, 132, 0.7)',
+    'rgba(54, 162, 235, 0.7)',
+    'rgba(255, 206, 86, 0.7)',
+    'rgba(75, 192, 192, 0.7)',
+    'rgba(153, 102, 255, 0.7)',
+    'rgba(255, 159, 64, 0.7)',
+    'rgba(124, 252, 0, 0.7)',
+    'rgba(255, 105, 180, 0.7)',
+    'rgba(0, 206, 209, 0.7)',
+    'rgba(255, 215, 0, 0.7)',
+    'rgba(220, 20, 60, 0.7)',
+    'rgba(0, 250, 154, 0.7)',
+  ],
   border: '#E5E7EB',
 };
 

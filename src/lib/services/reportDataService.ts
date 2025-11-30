@@ -115,7 +115,7 @@ export interface ReportData {
 }
 
 /**
- * Fetches all payments from the database
+ * Fetches all payments from the database and normalizes tip_plata for Buget students
  */
 export async function fetchAllPayments(): Promise<PaymentRecord[]> {
   const { data, error } = await supabase
@@ -128,7 +128,13 @@ export async function fetchAllPayments(): Promise<PaymentRecord[]> {
     throw new Error(`Failed to fetch payments: ${error.message}`);
   }
 
-  return data || [];
+  // Normalize tip_plata: if forma is 'Buget', automatically set tip_plata to 'Plată refacere curs'
+  const normalizedData = (data || []).map(payment => ({
+    ...payment,
+    tip_plata: payment.forma === 'Buget' ? 'Plată refacere curs' : payment.tip_plata,
+  }));
+
+  return normalizedData;
 }
 
 /**
