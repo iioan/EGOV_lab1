@@ -25,6 +25,9 @@ Chart.register(...registerables);
 const CHART_WIDTH = 500;
 const CHART_HEIGHT = 300;
 
+// Maximum length for course names in charts
+const MAX_COURSE_NAME_LENGTH = 20;
+
 // Color palette for charts
 const COLORS = {
   primary: ['#4F46E5', '#7C3AED', '#EC4899', '#F59E0B', '#10B981', '#3B82F6', '#EF4444', '#8B5CF6'],
@@ -245,7 +248,11 @@ function generateTopCoursesBarChart(stats: CourseStats[]): string {
   if (stats.length === 0) {
     return generatePlaceholderChart('Nu exista date despre cursuri');
   }
-  const labels = stats.map(s => s.courseName.length > 20 ? s.courseName.substring(0, 20) + '...' : s.courseName);
+  const labels = stats.map(s => 
+    s.courseName.length > MAX_COURSE_NAME_LENGTH 
+      ? s.courseName.substring(0, MAX_COURSE_NAME_LENGTH) + '...' 
+      : s.courseName
+  );
   const data = stats.map(s => s.count);
   const config = createBarConfig(labels, data, 'Top 5 Cursuri Refacute', 'Plati', true);
   return renderChartToBase64(config);

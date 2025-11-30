@@ -263,7 +263,7 @@ function computeCreditStats(payments: PaymentRecord[]): CreditStats[] {
       count,
       percentage: total > 0 ? Math.round((count / total) * 100) : 0,
     }))
-    .sort((a, b) => parseInt(b.credits) - parseInt(a.credits));
+    .sort((a, b) => parseInt(b.credits, 10) - parseInt(a.credits, 10));
 }
 
 /**

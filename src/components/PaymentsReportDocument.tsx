@@ -259,19 +259,29 @@ function removeDiacritics(text: string): string {
   return text.replace(/[ăĂâÂîÎșȘțȚ]/g, (match) => diacriticsMap[match] || match);
 }
 
-// Helper to format currency
+// Helper to format currency with fallback for unsupported locales
 function formatCurrency(amount: number): string {
-  return `${amount.toLocaleString('ro-RO')} RON`;
+  try {
+    return `${amount.toLocaleString('ro-RO')} RON`;
+  } catch {
+    // Fallback formatting if locale not supported
+    return `${amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')} RON`;
+  }
 }
 
-// Helper to format date
+// Helper to format date with fallback
 function formatDate(dateStr: string): string {
   const date = new Date(dateStr);
-  return date.toLocaleDateString('ro-RO', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric',
-  });
+  try {
+    return date.toLocaleDateString('ro-RO', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  } catch {
+    // Fallback formatting if locale not supported
+    return date.toISOString().split('T')[0];
+  }
 }
 
 interface PaymentsReportDocumentProps {
