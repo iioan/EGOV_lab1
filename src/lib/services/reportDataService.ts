@@ -212,9 +212,9 @@ function computePaymentTypeStats(payments: PaymentRecord[]): PaymentTypeStats[] 
 }
 
 /**
- * Extracts an acronym from a course name by extracting the first letter of each word
- * Example: "Structuri de Date si Algoritmi" → "SDSA" but we extract capitals → "SDA"
- * This function extracts only uppercase letters from the input
+ * Extracts capital letters from a course name to form an acronym
+ * Example: "Structuri de Date si Algoritmi" → "SDA" (extracts S, D, A - the capital letters)
+ * Note: This only extracts existing uppercase letters, not first letters of each word
  */
 function extractAcronym(text: string): string {
   if (!text) return '';
