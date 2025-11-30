@@ -1,4 +1,4 @@
-import { createCanvas } from '@napi-rs/canvas';
+import { Canvas } from 'skia-canvas';
 import { Chart, ChartConfiguration, registerables } from 'chart.js';
 import {
   ReportData,
@@ -58,13 +58,13 @@ const COLORS = {
  * Generates a base64 encoded PNG from a chart configuration
  */
 function renderChartToBase64(configuration: ChartConfiguration): string {
-  const canvas = createCanvas(CHART_WIDTH, CHART_HEIGHT);
+  const canvas = new Canvas(CHART_WIDTH, CHART_HEIGHT);
   const ctx = canvas.getContext('2d') as unknown as CanvasRenderingContext2D;
 
   // Create the chart
   new Chart(ctx, configuration);
 
-  return canvas.toDataURL('image/png');
+  return canvas.toDataURLSync('image/png');
 }
 
 /**
